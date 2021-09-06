@@ -24,6 +24,8 @@ int AceGenElement::load(std::string path_to_elememt)
         std::cerr << "Error: Element path: " << path_to_elememt << " is not a valid path." << std::endl;
         return -1;
     }
+    //compiler_call = SMSCCompiler; // future feature set by cmake
+    // and stop copying ! instead we give the compiler the paths to the assets !
     std::string element_directory(path_to_elememt.substr(0, dir+1));
     std::string element_name(path_to_elememt.substr(dir+1, path_to_elememt.size()));
     if (CMakeDebugConfig) std::cout << "Element Directory: " << element_directory << std::endl;
@@ -32,13 +34,9 @@ int AceGenElement::load(std::string path_to_elememt)
     path_to_elememt_shared_object.pop_back();
     path_to_elememt_shared_object.append("so");
     if (CMakeDebugConfig) std::cout << "Compiling Element: " << path_to_elememt_shared_object << std::endl;
-    //compiler_call = SMSCCompiler; // future feature set by cmake
-    std::string compile_command(compiler_call + " -o" + path_to_elememt_shared_object + " " + path_to_elememt+ " " + element_directory +"SMSUtility.c");
+    std::string compile_command(compiler_call + " -o" + path_to_elememt_shared_object + " " + path_to_elememt+ " " + SMSUtil + " -I" + SMSHeader);
     if (CMakeDebugConfig) std::cout << "Command: " << compile_command << std::endl;
-    std::string copy_command(std::string("cp ") + SMSHeader + " " + element_directory + "sms.h && cp "+ SMSUtil + " " + element_directory + "SMSUtility.c && ");
-    std::string cleanup_command(std::string(" && rm ") + element_directory + "sms.h && rm " + element_directory + "SMSUtility.c");
-    std::string command = copy_command + compile_command + cleanup_command;
-    int ret = system(&command[0]);
+    int ret = system(&compile_command[0]);
     if (ret==-1)
     {
         std::cerr << "Error: Compilation of " << path_to_elememt << " failed!" << std::endl;

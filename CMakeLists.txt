@@ -8,7 +8,7 @@ include(CTest)
 enable_testing()
 
 # define paths to the AceFEM files
-set(SMSHeader "${CMAKE_SOURCE_DIR}/assets/sms.h")
+set(SMSHeader "${CMAKE_SOURCE_DIR}/assets/")
 set(SMSUtil   "${CMAKE_SOURCE_DIR}/assets/SMSUtility.c")
 set(AceHeader "${CMAKE_SOURCE_DIR}/include/" "${CMAKE_SOURCE_DIR}/assets/")
 
