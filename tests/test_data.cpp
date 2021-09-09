@@ -4,7 +4,7 @@
 int main(int, char**) 
 {
     AceGenElement* elmt;
-    elmt = new AceGenElement("/Users/sash/c_coding/ace_layer/elements/T1_Laplace.c");
+    elmt = new AceGenElement(std::string(SMSElmt)+"/T1_Laplace.c");
     
     size_t no_elmt = 100;
     size_t no_nodes = 300;
@@ -13,5 +13,5 @@ int main(int, char**)
     //AceFEMNodeDataContainer<20, 5> NdeData;
 
     delete elmt;
-    return -1;
+    return 0;
 }

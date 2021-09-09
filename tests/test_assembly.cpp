@@ -6,7 +6,7 @@ int main(int, char**)
     // Simulation of an assembly process for a small mesh
 
     // Step 1: Load the element file
-    AceGenElement T1_Laplace("/Users/sash/c_coding/ace_layer/elements/T1_Laplace.c");
+    AceGenElement T1_Laplace(std::string(SMSElmt)+"/T1_Laplace.c");
 
     // Step 2: Gather information to build FE-space / data structures
     int no_nodes = T1_Laplace -> get_NoNodes();

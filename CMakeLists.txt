@@ -9,9 +9,11 @@ include(CTest)
 enable_testing()
 
 # define paths to the AceFEM files
-set(SMSHeader "${CMAKE_SOURCE_DIR}/assets/")
-set(SMSUtil   "${CMAKE_SOURCE_DIR}/assets/SMSUtility.c")
-set(AceHeader "${CMAKE_SOURCE_DIR}/include/" "${CMAKE_SOURCE_DIR}/assets/")
+set(SMSHeader "${CMAKE_CURRENT_SOURCE_DIR}/assets/")
+set(SMSElmt   "${CMAKE_CURRENT_SOURCE_DIR}/elements/")
+set(SMSUtil   "${CMAKE_CURRENT_SOURCE_DIR}/assets/SMSUtility.c")
+set(AceHeader "${CMAKE_CURRENT_SOURCE_DIR}/include/" "${CMAKE_CURRENT_SOURCE_DIR}/assets/")
+
 
 # build the shared library: libacelayer.xx
 add_subdirectory(src)
