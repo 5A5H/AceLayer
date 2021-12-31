@@ -1,4 +1,5 @@
 #include <ace_layer.hpp>
+#include <compile.hpp>
 #include <iomanip>
 
 int AceGenElement::load(std::string path_to_elememt)
@@ -32,9 +33,10 @@ int AceGenElement::load(std::string path_to_elememt)
     out << "Element Name     : " << element_name << std::endl;
     std::string path_to_elememt_shared_object(path_to_elememt);
     path_to_elememt_shared_object.pop_back();
-    path_to_elememt_shared_object.append("so");
+    path_to_elememt_shared_object.pop_back();
+    path_to_elememt_shared_object.append(std::string(SharedLibrarySUFFIX));
     out << "Compiling Element: " << path_to_elememt_shared_object << std::endl;
-    std::string compile_command(compiler_call + " -o" + path_to_elememt_shared_object + " " + path_to_elememt+ " " + SMSUtil + " -I" + SMSHeader);
+    std::string compile_command(std::string(SharedLibCompile) + " -o" + path_to_elememt_shared_object + " " + path_to_elememt+ " " + SMSUtil + " -I" + SMSHeader);
     out << "Command: " << compile_command << std::endl;
     int ret = system(&compile_command[0]);
     if (ret==-1)

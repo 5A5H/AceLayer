@@ -20,3 +20,8 @@ add_subdirectory(src)
 
 # build the tests !Currently the tests fail so that i can see the output directly!
 add_subdirectory(tests)
+
+configure_file(
+    "${PROJECT_SOURCE_DIR}/include/compile.hpp.in"
+    "${PROJECT_BINARY_DIR}/include/compile.hpp"
+)
