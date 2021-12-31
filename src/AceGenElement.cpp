@@ -6,7 +6,7 @@ int AceGenElement::load(std::string path_to_elememt)
     // if a shared library is loaded, it must be released frist
     if (shared_elmt_lib!=nullptr)
     {
-        std::cout << "Warning: Unloading previously loaded element!" << std::endl;
+        out << "Warning: Unloading previously loaded element!" << std::endl;
         int unld = this -> unload();
         if (unld!=0)
         {
@@ -15,7 +15,7 @@ int AceGenElement::load(std::string path_to_elememt)
         }
     }
 
-    if (CMakeDebugConfig) std::cout << "Loading Element: " << path_to_elememt << std::endl;
+    if (CMakeDebugConfig) out << "Loading Element: " << path_to_elememt << std::endl;
     
     // always recompile the element
     std::size_t dir = path_to_elememt.rfind("/");
@@ -28,14 +28,14 @@ int AceGenElement::load(std::string path_to_elememt)
     // and stop copying ! instead we give the compiler the paths to the assets !
     std::string element_directory(path_to_elememt.substr(0, dir+1));
     std::string element_name(path_to_elememt.substr(dir+1, path_to_elememt.size()));
-    if (CMakeDebugConfig) std::cout << "Element Directory: " << element_directory << std::endl;
-    if (CMakeDebugConfig) std::cout << "Element Name     : " << element_name << std::endl;
+    if (CMakeDebugConfig) out << "Element Directory: " << element_directory << std::endl;
+    if (CMakeDebugConfig) out << "Element Name     : " << element_name << std::endl;
     std::string path_to_elememt_shared_object(path_to_elememt);
     path_to_elememt_shared_object.pop_back();
     path_to_elememt_shared_object.append("so");
-    if (CMakeDebugConfig) std::cout << "Compiling Element: " << path_to_elememt_shared_object << std::endl;
+    if (CMakeDebugConfig) out << "Compiling Element: " << path_to_elememt_shared_object << std::endl;
     std::string compile_command(compiler_call + " -o" + path_to_elememt_shared_object + " " + path_to_elememt+ " " + SMSUtil + " -I" + SMSHeader);
-    if (CMakeDebugConfig) std::cout << "Command: " << compile_command << std::endl;
+    if (CMakeDebugConfig) out << "Command: " << compile_command << std::endl;
     int ret = system(&compile_command[0]);
     if (ret==-1)
     {
@@ -141,8 +141,8 @@ int AceGenElement::SKR(
     for (int i=0; i<no_dofs; i++)
     {
         for (int j=0; j<no_dofs; j++) 
-                if (CMakeDebugConfig) std::cout << " " << StiffnessVector[i*no_dofs+j];
-        if (CMakeDebugConfig) std::cout << std::endl;
+                if (CMakeDebugConfig) out << " " << StiffnessVector[i*no_dofs+j];
+        if (CMakeDebugConfig) out << std::endl;
     }
             
 
@@ -152,7 +152,7 @@ int AceGenElement::SKR(
 int AceGenElement::unload()
 {
     if (shared_elmt_lib!=nullptr) dlclose(shared_elmt_lib);  
-    if (CMakeDebugConfig) std::cout << "AceGenElement unloaded!" << std::endl;
+    if (CMakeDebugConfig) out << "AceGenElement unloaded!" << std::endl;
     return 0;
 };
 
@@ -202,66 +202,66 @@ int AceGenElement::init(std::string path_to_elememt)
 
 int AceGenElement::status()
 {
-    std::cout << "Element Status: " << std::endl;
-    std::cout << "\t SpecIndex:               " << this->es.id.SpecIndex << std::endl;
-    std::cout << "\t NoDimensions:            " << this->es.id.NoDimensions << std::endl;
-    std::cout << "\t NoDOFGlobal:             " << this->es.id.NoDOFGlobal << std::endl;
-    std::cout << "\t NoDOFCondense:           " << this->es.id.NoDOFCondense << std::endl;
-    std::cout << "\t NoNodes:                 " << this->es.id.NoNodes << std::endl;
-    std::cout << "\t DOFGlobal:               {";
-    for (int i=0; i<(this->es.id.NoNodes); i++) std::cout << " " << this->es.DOFGlobal[i];
-    std::cout << " }" << std::endl;
-    std::cout << "\t NoDomainData:            " << this->es.id.NoDomainData << std::endl;
-    std::cout << "\t NoSegmentPoints:         " << this->es.id.NoSegmentPoints << std::endl;
-    std::cout << "\t IntCode:                 " << this->es.id.IntCode << std::endl;
-    std::cout << "\t NoTimeStorage:           " << this->es.id.NoTimeStorage << std::endl;
-    std::cout << "\t NoElementData:           " << this->es.id.NoElementData << std::endl;
-    std::cout << "\t NoGPostData:             " << this->es.id.NoGPostData << std::endl;
-    std::cout << "\t NoNPostData:             " << this->es.id.NoNPostData << std::endl;
-    std::cout << "\t SymmetricTangent:        " << this->es.id.SymmetricTangent << std::endl;
-    std::cout << "\t NoSensNames:             " << this->es.id.NoSensNames << std::endl;
-    std::cout << "\t ShapeSensitivity:        " << this->es.id.ShapeSensitivity << std::endl;
-    std::cout << "\t NoIData:                 " << this->es.id.NoIData << std::endl;
-    std::cout << "\t NoRData:                 " << this->es.id.NoRData << std::endl;
-    std::cout << "\t DefaultIntegrationCode:  " << this->es.id.DefaultIntegrationCode << std::endl;
-    std::cout << "\t LocalReKe:               " << this->es.id.LocalReKe << std::endl;
-    std::cout << "\t NoAdditionalData:        " << this->es.id.NoAdditionalData << std::endl;
-    std::cout << "\t NoCharSwitch:            " << this->es.id.NoCharSwitch << std::endl;
-    std::cout << "\t NoIntSwitch:             " << this->es.id.NoIntSwitch << std::endl;
-    std::cout << "\t NoDoubleSwitch:          " << this->es.id.NoDoubleSwitch << std::endl;
-    std::cout << "\t PostIterationCall:       " << this->es.id.PostIterationCall << std::endl;
-    std::cout << "\t Active:                  " << this->es.id.Active << std::endl;
-    std::cout << "\t DOFScaling:              " << this->es.id.DOFScaling << std::endl;
-    std::cout << "\t EBCSensitivity:          " << this->es.id.EBCSensitivity << std::endl;
-    std::cout << "\t SensitivityOrder:        " << this->es.id.SensitivityOrder << std::endl;
-    std::cout << "\t WorkingVectorSize:       " << this->es.id.WorkingVectorSize << std::endl;
-    std::cout << "\t Topology:                " << std::string(this->es.Topology) << std::endl;
-    std::cout << "\t DomainDataNames:         " << std::endl;
+    out << "Element Status: " << std::endl;
+    out << "\t SpecIndex:               " << this->es.id.SpecIndex << std::endl;
+    out << "\t NoDimensions:            " << this->es.id.NoDimensions << std::endl;
+    out << "\t NoDOFGlobal:             " << this->es.id.NoDOFGlobal << std::endl;
+    out << "\t NoDOFCondense:           " << this->es.id.NoDOFCondense << std::endl;
+    out << "\t NoNodes:                 " << this->es.id.NoNodes << std::endl;
+    out << "\t DOFGlobal:               {";
+    for (int i=0; i<(this->es.id.NoNodes); i++) out << " " << this->es.DOFGlobal[i];
+    out << " }" << std::endl;
+    out << "\t NoDomainData:            " << this->es.id.NoDomainData << std::endl;
+    out << "\t NoSegmentPoints:         " << this->es.id.NoSegmentPoints << std::endl;
+    out << "\t IntCode:                 " << this->es.id.IntCode << std::endl;
+    out << "\t NoTimeStorage:           " << this->es.id.NoTimeStorage << std::endl;
+    out << "\t NoElementData:           " << this->es.id.NoElementData << std::endl;
+    out << "\t NoGPostData:             " << this->es.id.NoGPostData << std::endl;
+    out << "\t NoNPostData:             " << this->es.id.NoNPostData << std::endl;
+    out << "\t SymmetricTangent:        " << this->es.id.SymmetricTangent << std::endl;
+    out << "\t NoSensNames:             " << this->es.id.NoSensNames << std::endl;
+    out << "\t ShapeSensitivity:        " << this->es.id.ShapeSensitivity << std::endl;
+    out << "\t NoIData:                 " << this->es.id.NoIData << std::endl;
+    out << "\t NoRData:                 " << this->es.id.NoRData << std::endl;
+    out << "\t DefaultIntegrationCode:  " << this->es.id.DefaultIntegrationCode << std::endl;
+    out << "\t LocalReKe:               " << this->es.id.LocalReKe << std::endl;
+    out << "\t NoAdditionalData:        " << this->es.id.NoAdditionalData << std::endl;
+    out << "\t NoCharSwitch:            " << this->es.id.NoCharSwitch << std::endl;
+    out << "\t NoIntSwitch:             " << this->es.id.NoIntSwitch << std::endl;
+    out << "\t NoDoubleSwitch:          " << this->es.id.NoDoubleSwitch << std::endl;
+    out << "\t PostIterationCall:       " << this->es.id.PostIterationCall << std::endl;
+    out << "\t Active:                  " << this->es.id.Active << std::endl;
+    out << "\t DOFScaling:              " << this->es.id.DOFScaling << std::endl;
+    out << "\t EBCSensitivity:          " << this->es.id.EBCSensitivity << std::endl;
+    out << "\t SensitivityOrder:        " << this->es.id.SensitivityOrder << std::endl;
+    out << "\t WorkingVectorSize:       " << this->es.id.WorkingVectorSize << std::endl;
+    out << "\t Topology:                " << std::string(this->es.Topology) << std::endl;
+    out << "\t DomainDataNames:         " << std::endl;
     for (int i=0; i<(this->es.id.NoDomainData); i++)
-        std::cout << "\t\t\t\t\t\t\t  - " << "\"" << std::string(this->es.DomainDataNames[i]) << "\" -> " << this->es.Data[i] << std::endl;
-    std::cout << "\t GPostNames:              " << std::endl;
+        out << "\t\t\t\t\t\t\t  - " << "\"" << std::string(this->es.DomainDataNames[i]) << "\" -> " << this->es.Data[i] << std::endl;
+    out << "\t GPostNames:              " << std::endl;
     for (int i=0; i<(this->es.id.NoGPostData); i++)
-        std::cout << "\t\t\t\t\t\t\t  - " << "\"" << std::string(this->es.GPostNames[i]) << "\"" << std::endl;
-    std::cout << "\t NPostNames:              " << std::endl;
+        out << "\t\t\t\t\t\t\t  - " << "\"" << std::string(this->es.GPostNames[i]) << "\"" << std::endl;
+    out << "\t NPostNames:              " << std::endl;
     for (int i=0; i<(this->es.id.NoNPostData); i++)
-        std::cout << "\t\t\t\t\t\t\t  - " <<"\"" << std::string(this->es.NPostNames[i]) << "\"" << std::endl;
-    std::cout << "\t Segments:                " << *(this->es.Segments) << std::endl;
-    std::cout << "\t NoNodeStorage:           " << *(this->es.NoNodeStorage) << std::endl;
-    std::cout << "\t NoNodeData:              " << *(this->es.NoNodeData) << std::endl;
-    std::cout << "\t NodeID:                  " << std::endl;
+        out << "\t\t\t\t\t\t\t  - " <<"\"" << std::string(this->es.NPostNames[i]) << "\"" << std::endl;
+    out << "\t Segments:                " << *(this->es.Segments) << std::endl;
+    out << "\t NoNodeStorage:           " << *(this->es.NoNodeStorage) << std::endl;
+    out << "\t NoNodeData:              " << *(this->es.NoNodeData) << std::endl;
+    out << "\t NodeID:                  " << std::endl;
     for (int i=0; i<(this->es.id.NoNodes); i++)
-        std::cout << "\t\t\t\t\t\t\t  - " << "\"" << std::string(this->es.NodeID[i]) << "\"" << std::endl;
-    std::cout << "\t ReferenceNodes:          " << std::endl;
+        out << "\t\t\t\t\t\t\t  - " << "\"" << std::string(this->es.NodeID[i]) << "\"" << std::endl;
+    out << "\t ReferenceNodes:          " << std::endl;
     for (int i=0; i<(this->es.id.NoNodes); i++)
-        std::cout << "\t\t\t\t\t\t\t  X_"<< i << ":\t [ " << this->es.ReferenceNodes[0+i*3] << ",\t" << this->es.ReferenceNodes[1+i*3] << ",\t" << this->es.ReferenceNodes[2+i*3] << " ]" << std::endl;
-    std::cout << "\t NoIntPoints:             " << this->es.id.NoIntPoints << std::endl;
-    std::cout << "\t NoIntPointsA:            " << this->es.id.NoIntPointsA << std::endl;
-    std::cout << "\t NoIntPointsB:            " << this->es.id.NoIntPointsB << std::endl;
-    std::cout << "\t NoIntPointsC:            " << this->es.id.NoIntPointsC << std::endl;
-    std::cout << "\t IntPoints:               " << std::endl;
-    std::cout << "\t\t\t\t\t\t\t  - "  << "xi:" << "\t\t\t\t" << "eta:" << "\t\t\t" << "zeta:" << "\t\t\t" << "omega:" << std::endl;
+        out << "\t\t\t\t\t\t\t  X_"<< i << ":\t [ " << this->es.ReferenceNodes[0+i*3] << ",\t" << this->es.ReferenceNodes[1+i*3] << ",\t" << this->es.ReferenceNodes[2+i*3] << " ]" << std::endl;
+    out << "\t NoIntPoints:             " << this->es.id.NoIntPoints << std::endl;
+    out << "\t NoIntPointsA:            " << this->es.id.NoIntPointsA << std::endl;
+    out << "\t NoIntPointsB:            " << this->es.id.NoIntPointsB << std::endl;
+    out << "\t NoIntPointsC:            " << this->es.id.NoIntPointsC << std::endl;
+    out << "\t IntPoints:               " << std::endl;
+    out << "\t\t\t\t\t\t\t  - "  << "xi:" << "\t\t\t\t" << "eta:" << "\t\t\t" << "zeta:" << "\t\t\t" << "omega:" << std::endl;
     for (int i=0; i<(this->es.id.NoIntPoints); i++)
-        std::cout << "\t\t\t\t\t\t\t    "  << std::setw(10) << std::setprecision(9) << std::fixed << this->es.IntPoints[0+4*i] << "   " << this->es.IntPoints[1+4*i] << "   " << this->es.IntPoints[2+4*i] << "   " << this->es.IntPoints[3+4*i] << std::endl;
+        out << "\t\t\t\t\t\t\t    "  << std::setw(10) << std::setprecision(9) << std::fixed << this->es.IntPoints[0+4*i] << "   " << this->es.IntPoints[1+4*i] << "   " << this->es.IntPoints[2+4*i] << "   " << this->es.IntPoints[3+4*i] << std::endl;
     return 0;
 };
 //     int    *NodeSpecs; /* index 0,1,2,.. */
