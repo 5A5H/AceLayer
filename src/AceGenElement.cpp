@@ -164,8 +164,34 @@ AceGenElement::AceGenElement(std::string path_to_elememt) : AceGenElement()
 AceGenElement::~AceGenElement()
 {
     unload();
+    // close output file if open
+    if (outfile) outfile.close();
     delete this->v;
 };
+
+bool AceGenElement::set_output(std::string filepath)
+{
+    // open the file
+    outfile.open(filepath);
+    if (outfile)
+    {
+        // if file state is "good" change the output
+        out.rdbuf(outfile.rdbuf());
+        return true;
+    }
+    return false;
+}
+
+bool AceGenElement::set_output(std::ofstream filestream)
+{
+    if (filestream)
+    {
+        // if file state is "good" change the output
+        out.rdbuf(filestream.rdbuf());
+        return true;
+    }
+    return false;
+}
 
 int AceGenElement::init(std::string path_to_elememt)
 {

@@ -118,10 +118,19 @@ class AceGenElement
     private:
         // this elements out stream
         std::ostream out;
+    
+    private:
+        // file stream
+        std::ofstream outfile;
 
     public:
         // Method to change the output stream to dev_null
         void disableOutput() { out.rdbuf(nullptr); }
+
+    public:
+        // method to switch output stream to a file
+        bool set_output(std::string filepath);
+        bool set_output(std::ofstream filestream);
 
 };
 
