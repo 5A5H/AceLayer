@@ -15,6 +15,7 @@ getter functions for securely exchange information with the rest of the code.
 */
 
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <vector>
 #include <array>
@@ -37,7 +38,7 @@ typedef int (CALLBACK* DLLSetElSpec)(ElementSpec *,int *,int i,int j);
 class AceGenElement
 {
     public:
-        AceGenElement() : es(), shared_elmt_lib(nullptr), compiler_call("gcc -shared -fpic") {};
+        AceGenElement() : es(), shared_elmt_lib(nullptr), compiler_call("gcc -shared -fpic"), out(std::cout.rdbuf()) {};
         ~AceGenElement();
         AceGenElement(const AceGenElement&) = delete;
         AceGenElement& operator=(const AceGenElement&) = delete;
@@ -113,6 +114,15 @@ class AceGenElement
         double* get_ReferenceNodes() const {return &(es.ReferenceNodes[0]);}
         size_t get_NoTimeStorage() const {return this->es.id.NoTimeStorage;}
         size_t get_NoElementData() const {return this->es.id.NoElementData;}
+
+    private:
+        // this elements out stream
+        std::ostream out;
+
+    public:
+        // Method to change the output stream to dev_null
+        void disableOutput() { out.rdbuf(nullptr); }
+
 };
 
 // Represents the AceFEM datastructures such as nodedata
