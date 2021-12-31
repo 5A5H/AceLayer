@@ -130,7 +130,7 @@ class AceGenElement
     public:
         // method to switch output stream to a file
         bool set_output(std::string filepath);
-        bool set_output(std::ofstream filestream);
+        bool set_output(std::ofstream &filestream);
 
 };
 

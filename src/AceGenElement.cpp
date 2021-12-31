@@ -186,7 +186,7 @@ bool AceGenElement::set_output(std::string filepath)
     return false;
 }
 
-bool AceGenElement::set_output(std::ofstream filestream)
+bool AceGenElement::set_output(std::ofstream &filestream)
 {
     if (filestream)
     {
