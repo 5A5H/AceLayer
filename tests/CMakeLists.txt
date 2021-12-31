@@ -10,6 +10,11 @@ add_executable(AceAssembly ${CMAKE_CURRENT_SOURCE_DIR}/test_assembly.cpp)
 target_link_libraries(AceAssembly PRIVATE acelayer)
 target_compile_definitions(AceAssembly PRIVATE SMSElmt="${SMSElmt}")
 
+add_executable(AceOutput ${CMAKE_CURRENT_SOURCE_DIR}/test_output.cpp)
+target_link_libraries(AceOutput PRIVATE acelayer)
+target_compile_definitions(AceOutput PRIVATE SMSElmt="${SMSElmt}")
+
 add_test(AceElementTest     AceElmt)
 add_test(AceAssemblyTest    AceAssembly)
 add_test(AceDataTest        AceData)
+add_test(AceOutputTest      AceOutput)
