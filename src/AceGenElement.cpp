@@ -15,7 +15,7 @@ int AceGenElement::load(std::string path_to_elememt)
         }
     }
 
-    if (CMakeDebugConfig) out << "Loading Element: " << path_to_elememt << std::endl;
+    out << "Loading Element: " << path_to_elememt << std::endl;
     
     // always recompile the element
     std::size_t dir = path_to_elememt.rfind("/");
@@ -28,14 +28,14 @@ int AceGenElement::load(std::string path_to_elememt)
     // and stop copying ! instead we give the compiler the paths to the assets !
     std::string element_directory(path_to_elememt.substr(0, dir+1));
     std::string element_name(path_to_elememt.substr(dir+1, path_to_elememt.size()));
-    if (CMakeDebugConfig) out << "Element Directory: " << element_directory << std::endl;
-    if (CMakeDebugConfig) out << "Element Name     : " << element_name << std::endl;
+    out << "Element Directory: " << element_directory << std::endl;
+    out << "Element Name     : " << element_name << std::endl;
     std::string path_to_elememt_shared_object(path_to_elememt);
     path_to_elememt_shared_object.pop_back();
     path_to_elememt_shared_object.append("so");
-    if (CMakeDebugConfig) out << "Compiling Element: " << path_to_elememt_shared_object << std::endl;
+    out << "Compiling Element: " << path_to_elememt_shared_object << std::endl;
     std::string compile_command(compiler_call + " -o" + path_to_elememt_shared_object + " " + path_to_elememt+ " " + SMSUtil + " -I" + SMSHeader);
-    if (CMakeDebugConfig) out << "Command: " << compile_command << std::endl;
+    out << "Command: " << compile_command << std::endl;
     int ret = system(&compile_command[0]);
     if (ret==-1)
     {
@@ -138,11 +138,12 @@ int AceGenElement::SKR(
 
 
     //debug putput
-    for (int i=0; i<no_dofs; i++)
+    if (CMakeDebugConfig) for (int i=0; i<no_dofs; i++)
     {
+        out << "StiffnessVector: " << std::endl;
         for (int j=0; j<no_dofs; j++) 
-                if (CMakeDebugConfig) out << " " << StiffnessVector[i*no_dofs+j];
-        if (CMakeDebugConfig) out << std::endl;
+                 out << " " << StiffnessVector[i*no_dofs+j];
+        out << std::endl;
     }
             
 
@@ -152,7 +153,7 @@ int AceGenElement::SKR(
 int AceGenElement::unload()
 {
     if (shared_elmt_lib!=nullptr) dlclose(shared_elmt_lib);  
-    if (CMakeDebugConfig) out << "AceGenElement unloaded!" << std::endl;
+    out << "AceGenElement unloaded!" << std::endl;
     return 0;
 };
 
