@@ -9,7 +9,7 @@ int main(int, char**)
     AceGenElement T1_Laplace(std::string(SMSElmt)+"/T1_Laplace.c");
 
     // Step 2: Gather information to build FE-space / data structures
-    int no_nodes = T1_Laplace -> get_NoNodes();
+    int no_nodes = T1_Laplace.get_NoNodes();
     ElementData ed_;
     NodeData* nd[no_nodes];
 
@@ -18,7 +18,7 @@ int main(int, char**)
     for (int i=0; i<no_nodes; i++)
     {
         nd[i] = new NodeData();
-        nd[i] -> X = &(elmt->get_ReferenceNodes()[0+i*3]);
+        nd[i] -> X = &(T1_Laplace.get_ReferenceNodes()[0+i*3]);
         nd[i] -> ap = &dummy[0];
         nd[i] -> at = &dummy[0];
     }
@@ -26,7 +26,7 @@ int main(int, char**)
     int idata[100];
 
     // Step 4. Call SKR to collect element matrices
-    T1_Laplace -> SKR(&ed_, &nd[0], &rdata[0], &idata[0], &p[0], &s[0]);
+    T1_Laplace.SKR(&ed_, &nd[0], &rdata[0], &idata[0], &p[0], &s[0]);
 
     // Step 5. At a Newton-Iteration (within the same time/load step) we need to update AceData
     

@@ -138,12 +138,15 @@ int AceGenElement::SKR(
 
 
     //debug putput
-    if (CMakeDebugConfig) for (int i=0; i<no_dofs; i++)
+    if (CMakeDebugConfig) 
     {
         out << "StiffnessVector: " << std::endl;
-        for (int j=0; j<no_dofs; j++) 
-                 out << " " << StiffnessVector[i*no_dofs+j];
-        out << std::endl;
+        for (int i=0; i<no_dofs; i++)
+        {
+            for (int j=0; j<no_dofs; j++) 
+                    out << " " << StiffnessVector[i*no_dofs+j];
+            out << std::endl;
+        }
     }
             
 
