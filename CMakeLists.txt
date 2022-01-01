@@ -21,6 +21,7 @@ add_subdirectory(src)
 # build the tests !Currently the tests fail so that i can see the output directly!
 add_subdirectory(tests)
 
+# use cmake to figure out compiler and flags used for the compilation of the element
 configure_file(
     "${PROJECT_SOURCE_DIR}/include/compile.hpp.in"
     "${PROJECT_BINARY_DIR}/include/compile.hpp"
