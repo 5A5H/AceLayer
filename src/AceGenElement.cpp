@@ -1,6 +1,28 @@
 #include <ace_layer.hpp>
 #include <compile.hpp>
 #include <iomanip>
+#include <sys/stat.h>
+
+int AceGenElement::compile(std::string path_to_elememt)
+{
+        std::size_t dir = path_to_elememt.rfind("/");
+        std::string element_directory(path_to_elememt.substr(0, dir+1));
+        std::string element_name(path_to_elememt.substr(dir+1, path_to_elememt.size()));
+        std::string path_to_elememt_shared_object(path_to_elememt);
+        path_to_elememt_shared_object.pop_back();
+        path_to_elememt_shared_object.pop_back();
+        path_to_elememt_shared_object.append(std::string(SharedLibrarySUFFIX));
+        out << "Compiling Element: " << path_to_elememt_shared_object << std::endl;
+        std::string compile_log(element_directory + "compile_log.txt");
+        std::string compile_command(std::string(SharedLibCompile) + " -o" + path_to_elememt_shared_object + " " + path_to_elememt+ " " + SMSUtil + " -I" + SMSHeader + " &> " + compile_log);
+        out << "Command: " << compile_command << std::endl;
+        int ret = system(&compile_command[0]);
+        if (ret==-1)
+        {
+            std::cerr << "Error: Compilation of " << path_to_elememt << " failed!" << std::endl;
+            return -2;
+        }
+}
 
 int AceGenElement::load(std::string path_to_elememt)
 {
@@ -18,15 +40,14 @@ int AceGenElement::load(std::string path_to_elememt)
 
     out << "Loading Element: " << path_to_elememt << std::endl;
     
-    // always recompile the element
+    // search for the c-code
     std::size_t dir = path_to_elememt.rfind("/");
     if (dir==std::string::npos)
     {
         std::cerr << "Error: Element path: " << path_to_elememt << " is not a valid path." << std::endl;
         return -1;
     }
-    //compiler_call = SMSCCompiler; // future feature set by cmake
-    // and stop copying ! instead we give the compiler the paths to the assets !
+
     std::string element_directory(path_to_elememt.substr(0, dir+1));
     std::string element_name(path_to_elememt.substr(dir+1, path_to_elememt.size()));
     out << "Element Directory: " << element_directory << std::endl;
@@ -35,15 +56,9 @@ int AceGenElement::load(std::string path_to_elememt)
     path_to_elememt_shared_object.pop_back();
     path_to_elememt_shared_object.pop_back();
     path_to_elememt_shared_object.append(std::string(SharedLibrarySUFFIX));
-    out << "Compiling Element: " << path_to_elememt_shared_object << std::endl;
-    std::string compile_command(std::string(SharedLibCompile) + " -o" + path_to_elememt_shared_object + " " + path_to_elememt+ " " + SMSUtil + " -I" + SMSHeader);
-    out << "Command: " << compile_command << std::endl;
-    int ret = system(&compile_command[0]);
-    if (ret==-1)
-    {
-        std::cerr << "Error: Compilation of " << path_to_elememt << " failed!" << std::endl;
-        return -2;
-    }
+
+    // only compile the element if no shared object exist
+    if (!( access( path_to_elememt_shared_object.c_str(), F_OK ) != -1 )) if (compile(path_to_elememt)==-2) return -2;
 
     // loading the newly generated shared library
     char* error;

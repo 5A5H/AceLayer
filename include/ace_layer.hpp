@@ -52,12 +52,19 @@ class AceGenElement
     public:
         // Load an AceGen generated element.
         // The input MUST be the parth to the c-code.
-        // At load(), the code will be compiled always.
+        // If a shared object exist, it is used, else
+        // the c-code is compiled using compile().
         // After succesfull load(), this AceGenElement has
         // knowledge about the AceGen elements properties,
         // e.g., number of nodes or length of histroy,
         // and access to its defined functions, e.g., SKR().
         int load(std::string path_to_elememt);
+
+    public:
+        // Compiles a c-code to a shared object.
+        // Can be triggered externally or automatically 
+        // by load().
+        int compile(std::string path_to_elememt);
 
     public:
         // Releases a loaded shared element library.
